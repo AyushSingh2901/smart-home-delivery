@@ -14,6 +14,9 @@ pipeline {
         
         // Jenkins Credentials ID configured with Docker Hub username/password
         DOCKER_CREDS_ID   = 'docker-hub-credentials'
+        
+        // Add paths to find docker on macOS runner
+        PATH              = "/usr/local/bin:/opt/homebrew/bin:${env.PATH}"
     }
 
     stages {
