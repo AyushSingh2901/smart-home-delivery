@@ -1,0 +1,22 @@
+{
+  "name": "smart-home-service-booking-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-ready MERN smart home service booking platform similar to Urban Company.",
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "mongo:start": "docker compose up -d mongo",
+    "mongo:logs": "docker compose logs -f mongo",
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "dev:full": "npm run mongo:start && npm run dev",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server",
+    "seed": "npm run seed --prefix server"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "mongodb": "^7.2.0"
+  }
+}

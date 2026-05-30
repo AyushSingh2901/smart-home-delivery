@@ -1,0 +1,52 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: smartserve-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./server
+    container_name: smartserve-api
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 5050
+      CLIENT_URL: http://localhost:8080
+      MONGO_URI: mongodb://mongo:27017/smart_home_services
+      JWT_SECRET: change-this-secret-before-production
+      JWT_EXPIRES_IN: 7d
+      RAZORPAY_KEY_ID: rzp_test_demo
+      RAZORPAY_KEY_SECRET: demo_secret
+      GOOGLE_MAPS_API_KEY: your-google-maps-api-key
+    ports:
+      - "5050:5050"
+
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_API_URL: http://localhost:5050/api
+        VITE_SOCKET_URL: http://localhost:5050
+        VITE_GOOGLE_MAPS_API_KEY: your-google-maps-api-key
+    container_name: smartserve-web
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+
+volumes:
+  mongo-data:
