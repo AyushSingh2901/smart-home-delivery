@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Replace with your Docker Hub username/org
-        DOCKER_HUB_USER   = 'yourdockerhubusername'
+        DOCKER_HUB_USER   = 'ayush2901'
         
         // Image names
         CLIENT_IMAGE_NAME = 'smart-home-client'
